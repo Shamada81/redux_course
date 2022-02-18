@@ -3,6 +3,7 @@ import React from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {addCustomerAction, removeCustomerAction} from "./store/customerReducer";
 import {addCashAction, getCashAction} from "./store/cashReducer";
+import {fetchCustomers} from "./asyncActions/customers";
 
 
 function App() {
@@ -40,6 +41,7 @@ function App() {
                 <button onClick={() => getCash(Number(prompt("Введите сумму")))}>Снять со счета</button>
                 <button onClick={() => addCustomer(prompt("Введите имя"))}>Добавить клиента</button>
                 <button onClick={() => getCash(Number(prompt("Введите сумму")))}>Удалить клиента</button>
+                <button onClick={() => dispatch(fetchCustomers())}>Получить клиентов из базы</button>
             </div>
             {customers.length > 0 ?
                 <div>
