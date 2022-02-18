@@ -1,63 +1,31 @@
 import './App.css';
 import React from "react";
 import {useDispatch, useSelector} from "react-redux";
-import {addCustomerAction, removeCustomerAction} from "./store/customerReducer";
-import {addCashAction, getCashAction} from "./store/cashReducer";
-import {fetchCustomers} from "./asyncActions/customers";
+import {asyncDecrementCreator, asyncIncrementCreator, decrementCreator, incrementCreator} from "./store/countReducer";
+import {fetchUsers} from "./store/userReducer";
+
 
 
 function App() {
+    const count = useSelector(state => state.countReducer.count )
+    const users = useSelector(state => state.userReducer.users)
     const dispatch = useDispatch()
-    const cash = useSelector(state => state.cash.cash)
-    const customers = useSelector(state => state.customers.customers)
-
-    const addCash = (cash) => {
-        // dispatch({type: "ADD_CASH", payload: cash})
-        dispatch(addCashAction(cash))
-    }
-
-    const getCash = (cash) => {
-        // dispatch({type: "GET_CASH", payload: cash})
-        dispatch(getCashAction(cash))
-    }
-
-    const addCustomer = (name) => {
-        const customer = {
-            name,
-            id: Date.now()
-        }
-        dispatch(addCustomerAction(customer))
-    }
-
-    const removeCustomer = (customer) => {
-        dispatch(removeCustomerAction(customer.id))
-    }
 
     return (
         <div className={"app"}>
-            <div style={{fontSize: '3rem'}}>{cash}</div>
-            <div style={{display: 'flex'}}>
-                <button onClick={() => addCash(Number(prompt("Введите сумму")))}>Пополнить счет</button>
-                <button onClick={() => getCash(Number(prompt("Введите сумму")))}>Снять со счета</button>
-                <button onClick={() => addCustomer(prompt("Введите имя"))}>Добавить клиента</button>
-                <button onClick={() => getCash(Number(prompt("Введите сумму")))}>Удалить клиента</button>
-                <button onClick={() => dispatch(fetchCustomers())}>Получить клиентов из базы</button>
+            <div className="count">{count}</div>
+            <div className='btns'>
+                <button className='btn' onClick={() => dispatch(asyncIncrementCreator())}>Инкремент++</button>
+                <button className='btn' onClick={() => dispatch(asyncDecrementCreator())}>Декремент--</button>
+                <button className='btn' onClick={() => dispatch(fetchUsers())}>Получить юзеров</button>
             </div>
-            {customers.length > 0 ?
-                <div>
-                    {customers.map(customer =>
-                        <div onClick={() => removeCustomer(customer)} style={{fontSize: '2rem', border: '1px solid black', padding: '10px', marginTop: 5}}>
-                            {customer.name}
-                        </div>
-                    )}
-                </div>
-                :
-                <div  style={{fontSize: '2rem'}}>
-                    Клиенты отсутствуют
-                </div>
-
-            }
-
+            <div className='users'>
+                {users.map(user =>
+                    <div className='user'>
+                        {user.name}
+                    </div>
+                )}
+            </div>
         </div>
     );
 }
